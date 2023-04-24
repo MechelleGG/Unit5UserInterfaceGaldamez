@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,15 +13,15 @@ public class GameManager : MonoBehaviour
     private int score;
     public TextMeshProUGUI gameOverText;
     public bool isGameActive;
+    public Button restartButton;
+    public GameObject titleScreen;
+    
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-        isGameActive = true;
-        StartCoroutine(SpawnTarget());
-        score = 0;
-        UpdateScore(0);
         
     }
 
@@ -34,10 +36,29 @@ public class GameManager : MonoBehaviour
         score += scoreToAdd;
         scoreText.text = "Score: " + score;
     }
+
+    public void StartGame(int difficulty)
+    {
+        isGameActive = true;
+        score = 0;
+        spawnRate /= difficulty;
+
+        StartCoroutine(SpawnTarget());
+        UpdateScore(0);
+
+        titleScreen.gameObject.SetActive(false);
+    }
+
     public void GameOver()
     {
+        restartButton.gameObject.SetActive(true);
         gameOverText.gameObject.SetActive(true);
         isGameActive = false;
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     IEnumerator SpawnTarget()
