@@ -15,7 +15,9 @@ public class GameManager : MonoBehaviour
     public bool isGameActive;
     public Button restartButton;
     public GameObject titleScreen;
-    
+    public TextMeshProUGUI livesText;
+    private int lives;
+
 
 
 
@@ -45,6 +47,7 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(SpawnTarget());
         UpdateScore(0);
+        UpdateLives(3);
 
         titleScreen.gameObject.SetActive(false);
     }
@@ -68,6 +71,15 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(spawnRate);
             int index = Random.Range(0, targets.Count);
             Instantiate(targets[index]);
+        }
+    }
+    public void UpdateLives(int livesToChange)
+    {
+        lives += livesToChange;
+        livesText.text = "Lives: " + lives;
+        if (lives <=0)
+        {
+            GameOver();
         }
     }
     
